@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0912">
+  <meta name="description" content="TypeRush is a premium dark typing speed challenge. Test your WPM, accuracy, and consistency.">
+  <title>TypeRush — Find your flow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="TypeRush home">
+        <span class="brand-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h11M4 17h7"/><path d="m17 14 3 3-3 3"/></svg></span>
+        <span>type<span>rush</span><i>.</i></span>
+      </a>
+      <nav class="topnav" aria-label="Main navigation">
+        <button class="nav-link active" data-page="test"><span>⌁</span> Typing test</button>
+        <button class="nav-link" data-page="stats"><span>▥</span> Your stats</button>
+      </nav>
+      <div class="top-actions">
+        <button class="sound-toggle" id="soundToggle" aria-pressed="false" title="Toggle typing sounds"><span class="sound-icon">♫</span><span id="soundLabel">Sound off</span></button>
+        <button class="round-button" id="helpButton" aria-label="Keyboard shortcuts" title="Keyboard shortcuts">?</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="page test-page active-page" id="testPage">
+        <div class="intro">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> YOUR DAILY SPEED CHALLENGE</div>
+          <h1>Find your <span>flow.</span></h1>
+          <p>Quiet the noise. Focus on the next character. See how fast you can go.</p>
+        </div>
+
+        <section class="mode-panel" aria-label="Test settings">
+          <div class="mode-group">
+            <span class="setting-label">MODE</span>
+            <div class="segmented" role="group" aria-label="Game mode">
+              <button class="segment active" data-mode="time" aria-pressed="true">◷ &nbsp;Time</button>
+              <button class="segment" data-mode="words" aria-pressed="false">≡ &nbsp;Words</button>
+            </div>
+          </div>
+          <div class="setting-divider"></div>
+          <div class="mode-group option-group" id="timeOptions">
+            <span class="setting-label">DURATION</span>
+            <div class="option-row" role="group" aria-label="Test duration">
+              <button class="option active" data-duration="15" aria-pressed="true">15s</button>
+              <button class="option" data-duration="30" aria-pressed="false">30s</button>
+              <button class="option" data-duration="60" aria-pressed="false">60s</button>
+              <button class="option" data-duration="120" aria-pressed="false">120s</button>
+            </div>
+          </div>
+          <div class="mode-group option-group hidden" id="wordOptions">
+            <span class="setting-label">WORD COUNT</span>
+            <div class="option-row" role="group" aria-label="Word count">
+              <button class="option" data-wordcount="10" aria-pressed="false">10</button>
+              <button class="option active" data-wordcount="25" aria-pressed="true">25</button>
+              <button class="option" data-wordcount="50" aria-pressed="false">50</button>
+              <button class="option" data-wordcount="100" aria-pressed="false">100</button>
+            </div>
+          </div>
+          <div class="setting-divider final-divider"></div>
+          <div class="mode-group difficulty-group">
+            <span class="setting-label">CONTENT</span>
+            <select id="contentMode" aria-label="Text difficulty">
+              <option value="normal">Normal words</option>
+              <option value="punctuation">Punctuation</option>
+              <option value="numbers">Numbers & symbols</option>
+            </select>
+          </div>
+          <button class="reset-button" id="resetButton" title="Restart test (Tab + Enter)"><span>↻</span> Restart</button>
+        </section>
+
+        <section class="test-card" aria-label="Typing test">
+          <div class="live-stats">
+            <div class="live-stat"><span class="live-label">WPM</span><strong id="liveWpm">0</strong></div>
+            <div class="live-stat"><span class="live-label">ACCURACY</span><strong id="liveAccuracy">100<span class="unit">%</span></strong></div>
+            <div class="live-stat"><span class="live-label">TIME LEFT</span><strong id="liveTime">15<span class="unit">s</span></strong></div>
+            <div class="live-stat errors-stat"><span class="live-label">ERRORS</span><strong id="liveErrors">0</strong></div>
+          </div>
+          <div class="typing-area" id="typingArea">
+            <div class="text-display" id="textDisplay" aria-hidden="true"></div>
+            <textarea id="typingInput" class="typing-input" aria-label="Type the displayed text here" autocomplete="off" autocapitalize="off" spellcheck="false" autocorrect="off" enterkeyhint="done"></textarea>
+            <div class="typing-overlay" id="typingOverlay">
+              <div class="overlay-icon">⌨</div>
+              <strong>Ready when you are</strong>
+              <span>Start typing to begin the test</span>
+              <kbd>or click here</kbd>
+            </div>
+          </div>
+          <div class="typing-footer">
+            <div class="keyboard-tip"><kbd>tab</kbd> + <kbd>enter</kbd> <span>restart test</span></div>
+            <div class="progress-wrap"><div class="progress-track"><span id="testProgress"></span></div><span id="progressLabel">0% complete</span></div>
+            <button class="focus-button" id="focusButton"><span>⌗</span> Focus mode</button>
+          </div>
+        </section>
+
+        <section class="bottom-grid">
+          <article class="tip-card">
+            <div class="tip-symbol">✦</div><div><span class="tip-label">A LITTLE REMINDER</span><p>Accuracy first. Speed will follow.</p></div>
+          </article>
+          <article class="best-card">
+            <div class="best-icon">♛</div><div><span class="tip-label">PERSONAL BEST</span><div class="best-line"><strong id="personalBest">—</strong><span>WPM</span><span class="best-divider"></span><span id="bestAccuracy">—% accuracy</span></div></div><button class="best-arrow" id="viewStatsButton" aria-label="View stats">↗</button>
+          </article>
+        </section>
+        <footer class="footer"><span>Built for the love of words <b>♥</b></span><span>TypeRush <i>v1.0</i></span></footer>
+      </section>
+
+      <section class="page stats-page" id="statsPage">
+        <div class="stats-heading"><div><div class="eyebrow"><span class="eyebrow-dot"></span> YOUR PROGRESS, VISUALIZED</div><h1>Better every <span>keystroke.</span></h1><p>Your practice adds up. Here’s the proof.</p></div><button class="secondary-button" id="backToTest">← Back to test</button></div>
+        <section class="summary-grid">
+          <article class="summary-card"><span>BEST SPEED</span><div><strong id="statsBestWpm">0</strong><small>WPM</small></div><p>Your fastest completed test</p></article>
+          <article class="summary-card"><span>BEST ACCURACY</span><div><strong id="statsBestAccuracy">0</strong><small>%</small></div><p>Your most accurate test</p></article>
+          <article class="summary-card"><span>TESTS COMPLETED</span><div><strong id="statsTests">0</strong></div><p>Every session counts</p></article>
+          <article class="summary-card"><span>AVERAGE SPEED</span><div><strong id="statsAverage">0</strong><small>WPM</small></div><p>Across your saved tests</p></article>
+        </section>
+        <section class="chart-card">
+          <div class="section-heading"><div><h2>Speed over time</h2><p>Your last 12 completed tests</p></div><span class="chart-legend"><i></i> WPM</span></div>
+          <div class="chart-wrap"><canvas id="wpmChart" role="img" aria-label="Line chart showing words per minute across recent typing tests"></canvas><div class="chart-empty hidden" id="chartEmpty"><span>⌁</span><strong>Your progress starts here</strong><p>Complete a typing test to see your speed graph.</p></div></div>
+        </section>
+        <section class="lower-stats">
+          <article class="history-card">
+            <div class="section-heading"><div><h2>Recent tests</h2><p>Your latest sessions</p></div><button class="text-button" id="clearHistoryButton">Clear history</button></div>
+            <div id="historyList" class="history-list"></div>
+          </article>
+          <article class="achievements-card">
+            <div class="section-heading"><div><h2>Achievements</h2><p>Little wins, big momentum</p></div></div>
+            <div id="achievementList" class="achievement-list"></div>
+          </article>
+        </section>
+        <footer class="footer"><span>Built for the love of words <b>♥</b></span><span>TypeRush <i>v1.0</i></span></footer>
+      </section>
+    </main>
+  </div>
+
+  <section class="result-backdrop hidden" id="resultBackdrop" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+    <div class="result-modal">
+      <button class="modal-close" id="closeResults" aria-label="Close results">×</button>
+      <div class="result-kicker"><span class="eyebrow-dot"></span> TEST COMPLETE</div>
+      <div class="result-medal">✦</div>
+      <h2 id="resultTitle">Nice work.</h2>
+      <p class="result-subtitle" id="resultSubtitle">Every session makes you sharper.</p>
+      <div class="result-main"><strong id="resultWpm">0</strong><span>WPM</span><div class="new-best hidden" id="newBestBadge">✦ NEW PERSONAL BEST</div></div>
+      <div class="result-metrics">
+        <div><span>ACCURACY</span><strong id="resultAccuracy">100%</strong></div>
+        <div><span>RAW WPM</span><strong id="resultRawWpm">0</strong></div>
+        <div><span>CHARACTERS</span><strong id="resultChars">0 / 0</strong></div>
+        <div><span>ERRORS</span><strong id="resultErrors">0</strong></div>
+      </div>
+      <div class="result-chart"><div class="result-chart-head"><span>YOUR SPEED</span><span id="resultDuration">15 second test</span></div><canvas id="resultChart" aria-label="Speed throughout the completed test"></canvas></div>
+      <div class="result-actions"><button class="secondary-button" id="resultStats">View stats</button><button class="primary-button" id="tryAgainButton">↻ &nbsp; Try again</button></div>
+    </div>
+  </section>
+
+  <section class="help-backdrop hidden" id="helpBackdrop" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="help-modal"><button class="modal-close" id="closeHelp" aria-label="Close help">×</button><div class="result-kicker">QUICK GUIDE</div><h2 id="helpTitle">Find your rhythm.</h2><p>Type the words exactly as shown. Your test starts with your first keystroke.</p><div class="shortcut-row"><span>Restart the test</span><span><kbd>Tab</kbd> + <kbd>Enter</kbd></span></div><div class="shortcut-row"><span>Focus the typing area</span><kbd>Click text</kbd></div><div class="shortcut-row"><span>Exit focus mode</span><kbd>Esc</kbd></div><button class="primary-button help-done" id="helpDone">Got it</button></div>
+  </section>
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
